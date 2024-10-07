@@ -734,6 +734,9 @@ class LoRAFinetuneRecipeDistributed(FTRecipeInterface):
                 labels = batch.pop("labels")
 
                 logits = self._model(**batch)
+                # labels shape is [1, 860]
+                print(f"{batch['tokens'].shape=} and {labels.shape=} and {logits[0].shape=}")
+                print(f"{len(logits)=} and {logits[0].shape=} and {labels=} and {logits[0]=}")
 
                 # Shift labels to compute loss
                 # equivalent to doing labels[..., 1:] and logits[..., :-1, :]
@@ -741,6 +744,9 @@ class LoRAFinetuneRecipeDistributed(FTRecipeInterface):
                 labels = torch.hstack(
                     (labels[..., 1:], self.ignore_labels_cache[: labels.shape[0]])
                 )
+                print(f"{labels.shape=}")
+                exit()
+
                 if not isinstance(logits, list):
                     labels = labels.reshape(-1)
                     logits = logits.reshape(-1, logits.size(-1))
