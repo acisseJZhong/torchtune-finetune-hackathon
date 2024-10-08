@@ -176,10 +176,13 @@ class InferenceRecipe:
             stop_tokens=self._tokenizer.stop_tokens,
             custom_generate_next_token=custom_generate_next_token,
         )
+        print(f"{generated_tokens.shape=} and {cfg.max_new_tokens=} and {self._tokenizer.stop_tokens=}")
         generated_tokens = generated_tokens.tolist()
         t = time.perf_counter() - t0
 
+        logger.info("Generated tokens:")
         logger.info(self._tokenizer.decode(generated_tokens[0]))
+        logger.info("End of printing generated tokens")
 
         model_size = sum(
             [
